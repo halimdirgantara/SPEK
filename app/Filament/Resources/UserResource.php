@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -39,13 +37,17 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('grade')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('avatar')
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('avatar')
+                    ->image()
+                    ->directory('avatar')
+                    ->preserveFilenames()
+                    ->fetchFileInformation(false),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                    ->password() //  password text input
+                    ->revealable() // hide show password
+                    ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                    ->dehydrated(fn(?string $state): bool => filled($state)),
                 Forms\Components\Select::make('organization_id')
                     ->relationship('organization', 'name'),
             ]);
@@ -67,11 +69,8 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('grade')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('avatar')
+                Tables\Columns\ImageColumn::make('avatar')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('organization.name')
                     ->numeric()
                     ->sortable(),
