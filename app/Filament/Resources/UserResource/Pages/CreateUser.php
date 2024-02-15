@@ -14,4 +14,10 @@ class CreateUser extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    protected function afterValidate(): void
+    {
+        // Runs before the form fields are saved to the database.
+        // dd($this->data);
+    }
 }

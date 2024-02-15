@@ -69,8 +69,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('grade')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('avatar')
-                    ->searchable(),
+                Tables\Columns\ImageColumn::make('avatar'),
                 Tables\Columns\TextColumn::make('organization.name')
                     ->numeric()
                     ->sortable(),
