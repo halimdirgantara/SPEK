@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('funding_source');
             $table->string('account_code');
             $table->integer('budget');
+            $table->foreignId('organization_id');
+            $table->foreignId('createad_by');
             $table->timestamps();
         });
     }
