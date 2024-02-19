@@ -39,7 +39,7 @@ return new class extends Migration
             $table->date('provider_selection_end');
             $table->timestamp('package_update_date')->nullable();
             $table->foreignId('organization_id');
-            $table->foreignId('createad_by');
+            $table->foreignId('created_by');
             $table->timestamps();
         });
     }
